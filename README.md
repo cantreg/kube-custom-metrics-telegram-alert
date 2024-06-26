@@ -1,5 +1,5 @@
 
-This is a demo of kubernetis autoscaling on custom prometeus metrics.
+This is a demo of kubernetes autoscaling on custom prometeus metrics.
 If autoscaling exeeds its maximum limit of 10 then a custom alert will be pushed to a telegram bot.
 
 In alert-bot-secret.yaml change botToken.
