@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  creationTimestamp: null
+  labels:
+    prometheus: example
+    role: alert-rules
+  name: prometheus-example-rules
+spec:
+  groups:
+  - name: ./example.rules
+    rules:
+    - alert: AutoScaleOnLoad
+      #vector(1)
+      expr: kube_horizontalpodautoscaler_status_current_replicas == kube_horizontalpodautoscaler_spec_max_replicas
+      for: 5s
+      labels:
+        severity: warning
+      annotations:
+        description: "The maximum number of desired Pods has been hit: {{ $value }}\nlabels = {{ $labels }}"
+        instancename: "{{ $labels.instance }}"
+        summary: Kubernetes HPA scale capability (instance {{ $labels.instance }})

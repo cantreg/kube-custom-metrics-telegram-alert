@@ -1,0 +1,33 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: config-example
+  labels:
+    alertmanagerConfig: example
+spec:
+  route:
+    groupBy:
+    - job
+    - alertname
+    - cluster
+    - service
+    groupInterval: 1m
+    groupWait: 5s
+    receiver: "telegram"
+    repeatInterval: 4h
+  receivers:
+  - name: telegram
+    telegramConfigs:
+    - apiURL: https://api.telegram.org
+      botToken: 
+        name: alert-bot-secret
+        key: botToken
+      chatID: 00000000
+      parseMode: Markdown
+      sendResolved: true
+      message: |
+        Alertname: {{ .GroupLabels.alertname }}
+        Severity: {{ .CommonLabels.severity }}
+        {{ range .Alerts }}
+        {{ .Annotations.description }}
+        {{ end }}
